@@ -1,4 +1,4 @@
-import java.io.IOException;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -12,7 +12,7 @@ public class ActionTime extends Listener  {
 
 	class SaveTask extends TimerTask {
         public void run() {
-        	etc.getServer().messageAll("¤d[Server] Saving Map...");
+        	etc.getServer().messageAll(defaultsavepremessage);
             etc.getServer().useConsoleCommand("save-all");
             try{
           	  Thread.sleep(10000); 
@@ -21,8 +21,8 @@ public class ActionTime extends Listener  {
             	     e.printStackTrace();
             	}
             
-            etc.getServer().messageAll("¤d[Server] Save Complete.");
-            new ActionTime(1800);
+            etc.getServer().messageAll(defaultsavepostmessage);
+            new ActionTime(savetime);
             timer.cancel(); //Stop the timer thread
         }
     }

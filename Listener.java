@@ -3,38 +3,44 @@ import java.io.IOException;
 
 import java.util.logging.Logger;
 import java.util.Timer;
-import java.util.TimerTask;
 
+public class Listener extends PluginListener  {
 
- public class Listener extends PluginListener  {
- Timer timer;
- 
- 
-	 
- 
-	 
+	 Timer timer;
 	 
 	 Server srv = etc.getServer();
 	 private Logger log = Logger.getLogger("Minecraft");
 	 
 	 protected PropertiesFile config;
 	 
+	 static String topline="Save-time, Backup-Time, and Restart-Time are all in seconds.";
+	 static String topline2="1800(half-hour), 900(15 minutes), 7200(2 hours)";
+	 static String defaultrestartsetting="false";
 	 static String defaultsavepremessage="千[Server] Saving Map...";
-	 private static String defaultbackupmessage="千[Server] Backing up Map...";	 
-	 private static String defaultrestartpremessage="千[Server] Restarting Server in 10 Seconds...";
-	 private static String defaultrestartpostmessage="千[Server] Restarting Server...";
-	 private static String defaultautosavesetting="true";
-	 private static String defaultautobackupsetting="true";
+	 static String defaultbackupmessage="千[Server] Backing up Map...";	 
+	 static String defaultrestartpremessage="千[Server] Restarting Server in 10 Seconds...";
+	 static String defaultrestartpostmessage="千[Server] Restarting Server...";
+	 static String defaultautosavesetting="false";
+	 static String defaultautobackupsetting="false";
 	 static String defaultsavepostmessage="千[Server] Save Complete.";
-	 private static String defaultbackuppostmessage="千[Server] Backup Complete.";
-	 private void Properties() {
-		 
+	 static String defaultbackuppostmessage="千[Server] Backup Complete.";
+	 static String defaultbackuptime="1800";
+	 static String defaultsavetime="900";
+	 static String defaultrestarttime="7200";
+	 static int backuptime;
+	 static int savetime;
+	 static int restarttime;
+	 static boolean autobackupsetting;
+	 static boolean autosavesetting;
+	 static boolean autorestartsetting;
+	 void Properties() {
+	
 		 config = new PropertiesFile("backupplugin.properties");
 
-		 //contents of properies file will be
-		 //default-save-message="the special save message"
-		 //
+		 
 		
+		 //topline = config.getString("#", topline);
+		 //topline2 = config.getString("#", topline2);
 		 defaultsavepremessage = config.getString("pre-save-message", defaultsavepremessage);
 		 defaultsavepostmessage= config.getString("post-save-message", defaultsavepostmessage);
 		 defaultbackupmessage = config.getString("backup-pre-message", defaultbackupmessage);
@@ -43,30 +49,79 @@ import java.util.TimerTask;
 		 defaultrestartpostmessage = config.getString("post-restart-message", defaultrestartpostmessage);   		   
 	 	 defaultautosavesetting = config.getString("Auto-Save", defaultautosavesetting);
 	 	 defaultautobackupsetting = config.getString("Auto-Backup", defaultautobackupsetting);
+	 	 defaultbackuptime = config.getString("Backup-Time(Seconds)", defaultbackuptime);
+	 	 defaultsavetime = config.getString("Save-Time(Seconds)", defaultsavetime);
+	 	 defaultrestarttime = config.getString("Restart-Time(Seconds)", defaultrestarttime);
+	 	 defaultrestartsetting = config.getString("Auto-Restart", defaultrestartsetting);
+	 	 
+	 	 log.info("[BackupPlugin] AutoSaving=[" + defaultautosavesetting + "]");
+	 	 log.info("[BackupPlugin] AutoBackups=[" + defaultautobackupsetting + "]");
+	 	 log.info("[BackupPlugin] AutoRestarts=[" + defaultrestartsetting + "]");
+	 	 if (defaultrestartsetting.equals("true")) {
+	 		 autorestartsetting = true;
+	 	 } else {
+	 		 autosavesetting = false;
+	 	 }
+	 	 
+	 	 if (defaultautosavesetting.equals("true")) {
+	 		 autosavesetting = true;
+	 	 } else
+	 		 autosavesetting = false;
+
+	 	 if (defaultautobackupsetting.equals("true")) 
+	 		 autobackupsetting = true;
+	 	 else
+	 		 autobackupsetting = false;
+	 	 
+	 	 savetime = Integer.parseInt(defaultsavetime);
+	 	 backuptime = Integer.parseInt(defaultbackuptime);
+	 	 restarttime = Integer.parseInt(defaultrestarttime);
+	 	 if (savetime == backuptime) {
+	 		 log.info("[BackupPlugin] Save-Time is the same as Backup-Time, Save-Time cut in half.");
+	 		 savetime=savetime/2;
+	 	 
+	 	 }
+	 	 
+	 	 if (savetime < 60) {
+	 		 log.info("Save-Time is too small, Save-Time set to 60 seconds.");
+	 		 savetime=60;
+	 	 }
+	 if (backuptime < 120) {
+		 log.info("[BackupPlugin] BackupTime is to small, set to 120 seconds.");
+		 backuptime=120;
+	 }
 	 }
 	
+	 public void ifautorestart() {
+		 if (autorestartsetting) {
+			 log.info("[BackupPlugin] Set Time Between Restarts is=[" + defaultrestarttime + "]");
+		 new RestartTime(restarttime);
+		 }
+	 }
+	
+	 public void ifautobackup() {
 		
-	
-	 
-	 
-	 
-		 
-	
-	public void ifautobackup() {
-		//if defaultautobackupsetting is true, new BackupTime(1800);
-		//if false, do nothing.
+		if (autobackupsetting) {
+			log.info("[BackupPlugin] Set Time Between Backups is=[" + defaultbackuptime + "]");
+			new BackupTime(backuptime);
+		}
 	}
 	 public void ifautosave() {
-		 //if defaultautosavesetting is true, new ActionTime(1800);
-		 //if false, do nothing.
+		 
+		 if (autosavesetting) {
+			 log.info("[BackupPlugin] Set Time Between Saves is=[" + defaultsavetime + "]");
+			 new ActionTime(savetime);
+		 
+		 }
 	 }
 	 
-	public Listener() {
-		 Properties();
-	 }
+//	public Listener() {
+//		log.info("backupplugin::listener called");
+//		 Properties();
+//	}
 	 
 	 public boolean Backup(Player p) {
-	   //launch shell script
+	   
 	   try {
 		   Runtime r = Runtime.getRuntime();
 		   r.exec("./Backup.sh");
@@ -98,7 +153,7 @@ import java.util.TimerTask;
 	     		return true;
 	     	}
 
-	     	if ((cmd[0].equals("/autosave")) && (p.canUseCommand("/backup")))
+	     	if ((cmd[0].equals("/autosave")) || ((cmd[0].equals("/as"))) && (p.canUseCommand("/backup")))
 	     	{
 	     		autosave();
 	     		p.sendMessage("勺Auto-Saving has been enabled manually in-game.");
@@ -122,15 +177,24 @@ import java.util.TimerTask;
 	     		return true;
 	     	}
 
-	     	if ((cmd[0].equals("/autobackup")) && (p.canUseCommand("/backup")))
+	     	if ((cmd[0].equals("/autobackup")) || ((cmd[0].equals("/ab"))) && (p.canUseCommand("/backup")))
 	     	{
 	     		p.sendMessage("勺Auto-Backups has been enabled manually in game.");
 	     		p.sendMessage("勺(To set Auto-Backups permanently, edit backupplugin.properties)");
 	     		new BackupTime(0);
 	     		return true; 
-	     		
 	     	}
-	 return false;
+	     	if ((cmd[0].equals("/autorestart")) || ((cmd[0].equals("/ar"))) && (p.canUseCommand("/backup")))
+	     	{
+	     		p.sendMessage("勺Auto-Restarts has been enabled manually in game.");
+	     		p.sendMessage("勺(To set Auto-Backups permanently, edit backupplugin.properties.");
+	     		p.sendMessage("勺The Next Auto-Restart will occur in 15 minutes, then every 2 hours.");
+	     		new RestartTime(900);
+	     		return true;
+	     	}
+	     	
+	     	
+	     	return false;
 	 }
  }
  

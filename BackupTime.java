@@ -13,7 +13,7 @@ public class BackupTime extends Listener {
 	}
 	class BackupTask extends TimerTask {
 		public void run() {
-			etc.getServer().messageAll("¤d[Server] Backing up Map...");
+			etc.getServer().messageAll(defaultbackupmessage);
 			try{
 		     	  Thread.sleep(10000); //wait 10 seconds
 			}
@@ -21,8 +21,8 @@ public class BackupTime extends Listener {
 		       	     e.printStackTrace();
 		       	}
 			Backup(null);
-			etc.getServer().messageAll("¤d[Server] Backup Complete.");
-		new BackupTime(1800);
+			etc.getServer().messageAll(defaultbackuppostmessage);
+		new BackupTime(backuptime);
 			timer.cancel();
 			
 		}

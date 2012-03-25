@@ -12,7 +12,7 @@ public class SaveTime extends Listener {
 	}
 	class SaveTimeTask extends TimerTask {
         public void run() {
-        	etc.getServer().messageAll("¤d[Server] Saving Map...");
+        	etc.getServer().messageAll(defaultsavepremessage);
             etc.getServer().useConsoleCommand("save-all");
             try{
           	  Thread.sleep(10000); 
@@ -21,7 +21,7 @@ public class SaveTime extends Listener {
             	     e.printStackTrace();
             	}
             
-            etc.getServer().messageAll("¤d[Server] Save Complete.");
+            etc.getServer().messageAll(defaultsavepostmessage);
             
             timer.cancel(); //Stop the timer thread
         }
