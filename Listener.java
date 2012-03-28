@@ -1,4 +1,3 @@
-
 import java.io.IOException;
 
 import java.util.logging.Logger;
@@ -16,14 +15,14 @@ public class Listener extends PluginListener  {
 	 static String topline="Save-time, Backup-Time, and Restart-Time are all in seconds.";
 	 static String topline2="1800(half-hour), 900(15 minutes), 7200(2 hours)";
 	 static String defaultrestartsetting="false";
-	 static String defaultsavepremessage="¤d[Server] Saving Map...";
-	 static String defaultbackupmessage="¤d[Server] Backing up Map...";	 
-	 static String defaultrestartpremessage="¤d[Server] Restarting Server in 10 Seconds...";
-	 static String defaultrestartpostmessage="¤d[Server] Restarting Server...";
+	 static String defaultsavepremessage="ï¿½d[Server] Saving Map...";
+	 static String defaultbackupmessage="ï¿½d[Server] Backing up Map...";	 
+	 static String defaultrestartpremessage="ï¿½d[Server] Restarting Server in 10 Seconds...";
+	 static String defaultrestartpostmessage="ï¿½d[Server] Restarting Server...";
 	 static String defaultautosavesetting="false";
 	 static String defaultautobackupsetting="false";
-	 static String defaultsavepostmessage="¤d[Server] Save Complete.";
-	 static String defaultbackuppostmessage="¤d[Server] Backup Complete.";
+	 static String defaultsavepostmessage="ï¿½d[Server] Save Complete.";
+	 static String defaultbackuppostmessage="ï¿½d[Server] Backup Complete.";
 	 static String defaultbackuptime="3600";
 	 static String defaultsavetime="1740";
 	 static String defaultrestarttime="10780";
@@ -115,10 +114,7 @@ public class Listener extends PluginListener  {
 		 }
 	 }
 	 
-//	public Listener() {
-//		log.info("backupplugin::listener called");
-//		 Properties();
-//	}
+
 	 
 	 public boolean Backup(Player p) {
 	   
@@ -126,7 +122,7 @@ public class Listener extends PluginListener  {
 		   Runtime r = Runtime.getRuntime();
 		   r.exec("./Backup.sh");
 	   } catch (IOException e) {
-			p.sendMessage("¤dExecution of backup script failed.");
+			p.sendMessage("ï¿½dExecution of backup script failed.");
 			return false;
 	   }
 	   
@@ -156,8 +152,8 @@ public class Listener extends PluginListener  {
 	     	if ((cmd[0].equals("/autosave")) || ((cmd[0].equals("/as"))) && (p.canUseCommand("/backup")))
 	     	{
 	     		autosave();
-	     		p.sendMessage("¤cAuto-Saving has been enabled manually in-game.");
-	     		p.sendMessage("¤c(To set autosaving permanently, edit backupplugin.properties)");
+	     		p.sendMessage("ï¿½cAuto-Saving has been enabled manually in-game.");
+	     		p.sendMessage("ï¿½c(To set autosaving permanently, edit backupplugin.properties)");
 	     		return true;
 	     	}
 
@@ -173,22 +169,22 @@ public class Listener extends PluginListener  {
 	     			e.printStackTrace();
 	     		}
        
-	     		etc.getServer().messageAll("¤d" +defaultrestartpostmessage);
+	     		etc.getServer().messageAll("ï¿½d" +defaultrestartpostmessage);
 	     		return true;
 	     	}
 
 	     	if ((cmd[0].equals("/autobackup")) || ((cmd[0].equals("/ab"))) && (p.canUseCommand("/backup")))
 	     	{
-	     		p.sendMessage("¤cAuto-Backups has been enabled manually in game.");
-	     		p.sendMessage("¤c(To set Auto-Backups permanently, edit backupplugin.properties)");
+	     		p.sendMessage("ï¿½cAuto-Backups has been enabled manually in game.");
+	     		p.sendMessage("ï¿½c(To set Auto-Backups permanently, edit backupplugin.properties)");
 	     		new BackupTime(0);
 	     		return true; 
 	     	}
 	     	if ((cmd[0].equals("/autorestart")) || ((cmd[0].equals("/ar"))) && (p.canUseCommand("/backup")))
 	     	{
-	     		p.sendMessage("¤cAuto-Restarts has been enabled manually in game.");
-	     		p.sendMessage("¤c(To set Auto-Backups permanently, edit backupplugin.properties.");
-	     		p.sendMessage("¤cThe Next Auto-Restart will occur in 15 minutes, then every 2 hours.");
+	     		p.sendMessage("ï¿½cAuto-Restarts has been enabled manually in game.");
+	     		p.sendMessage("ï¿½c(To set Auto-Backups permanently, edit backupplugin.properties.");
+	     		p.sendMessage("ï¿½cThe Next Auto-Restart will occur in 15 minutes, then every 2 hours.");
 	     		new RestartTime(900);
 	     		return true;
 	     	}
