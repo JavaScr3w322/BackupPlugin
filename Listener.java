@@ -24,9 +24,9 @@ public class Listener extends PluginListener  {
 	 static String defaultautobackupsetting="false";
 	 static String defaultsavepostmessage="¤d[Server] Save Complete.";
 	 static String defaultbackuppostmessage="¤d[Server] Backup Complete.";
-	 static String defaultbackuptime="1800";
-	 static String defaultsavetime="900";
-	 static String defaultrestarttime="7200";
+	 static String defaultbackuptime="3600";
+	 static String defaultsavetime="1740";
+	 static String defaultrestarttime="10780";
 	 static int backuptime;
 	 static int savetime;
 	 static int restarttime;

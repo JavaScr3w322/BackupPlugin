@@ -7,8 +7,8 @@ import java.util.logging.Logger;
 		static final Listener l = new Listener();
 		private Logger log = Logger.getLogger("Minecraft");
 		private String name = "BackupPlugin";
-		private String version = "v1.5.1";
-		private String author = "JavaScr3w322";
+		private String version = "v1.5.2";
+		//private String author = "JavaScr3w322";
 		
 		public BackupPlugin() {
 			log.info("BackupPlugin() new");
