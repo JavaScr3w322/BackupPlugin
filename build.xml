@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- based on auto-generated Eclipse build.xml file and CanaryMod -->
+<project name="BackupPlugin for CanaryMod" default="dist" basedir=".">
+  <description>
+    BackupPlugin is a plugin for CanaryMod which backs up the server and maps.
+  </description>
+  <property name="src" location="src" />
+  <property name="lib" location="lib" />
+  <property name="build" location="build" />
+  <property name="dist" location="dist" />
+  <property name="canarymod" location="../CanaryMod" />
+  <path id="classpath">
+    <fileset dir="${canarymod}/dist/">
+      <include name="CanaryMod.jar" />
+    </fileset>
+  </path>
+
+  <target name="verifyCanaryModJar" description="Checks to see if the CanaryMod JAR file is built.">
+    <available file="${canarymod}/dist/CanaryMod.jar" property="CanaryModJar.exists" />
+    <fail unless="CanaryModJar.exists" message="CanaryMod must be compiled before BackupPlugin can be compiled!" />
+  </target>
+
+  <target name="init" depends="clean, verifyCanaryModJar" description="Create the output directories.">
+    <mkdir dir="${build}" />
+    <mkdir dir="${build}/classes" />
+    <mkdir dir="${dist}" />
+  </target>
+
+  <target name="compile" depends="init" description="Compile the source.">
+    <javac destdir="${build}/classes" optimize="on" debug="on" includeantruntime="false" debuglevel="lines,vars,source" source="1.6" target="1.6" nowarn="off">
+      <src path="${src}" />
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile" description="Create the jar file">
+    <jar destfile="${dist}/BackupPlugin.jar">
+      <fileset dir="${build}/classes" />
+      <manifest>
+	<attribute name="Main-Class" value="Main" />
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="dist" depends="jar" >
+    <copy todir="${dist}">
+      <fileset dir="files">
+	<include name="*.sql" />
+	<include name="*.txt" />
+	<include name="*.bat" />
+	<include name="*.sh" />
+      </fileset>
+    </copy>
+    <zip destfile="${dist}/BackupPlugin.zip" basedir="${dist}" />
+  </target>
+
+  <target name="clean" description="Remove the output directories">
+    <delete dir="${build}" />
+    <delete dir="${dist}" />
+  </target>
+
+</project>
