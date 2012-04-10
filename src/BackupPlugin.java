@@ -7,20 +7,24 @@ import java.util.logging.Logger;
 		static final Listener l = new Listener();
 		private Logger log = Logger.getLogger("Minecraft");
 		private String name = "BackupPlugin";
-		private String version = "v1.5.2";
+		private String version = "v1.6";
 		//private String author = "JavaScr3w322";
 		
 		public BackupPlugin() {
-			log.info("BackupPlugin() new");
+			
 		}
 		
 		public void enable()
 		{
-			this.log.info("Loading " + this.name + " " + this.version + "...");
+			this.log.info("|========Loading " + this.name + " " + this.version + "...========|");
+			l.writeBP();
+			l.writeBP_NB();
+			l.writeB();
 			l.Properties();
 			l.ifautobackup();
 			l.ifautosave();
 			l.ifautorestart();
+			
 		}
 		
 		public void disable() 
@@ -30,7 +34,7 @@ import java.util.logging.Logger;
 		
 		public void initialize() 
 		{
-			log.info("[BackupPlugin] Succesfully Loaded.");
+			log.info("|========BackupPlugin " +this.version + " Loaded.===========|");
 			etc.getLoader().addListener(PluginLoader.Hook.COMMAND, l, this, 
 					PluginListener.Priority.MEDIUM);
 		}
